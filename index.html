@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Analytics — Luxury Business Intelligence Platform</title>
+    <!-- Premium Data & Visualization Framework CDNs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-canvas: #fbfafa;
+            --surface-card: #ffffff;
+            --text-primary: #1c1a17;
+            --text-muted: #706c64;
+            --luxury-gold: #b89047;
+            --luxury-gold-hover: #9c7634;
+            --luxury-dark: #111111;
+            --border-elegant: #eae6df;
+            --transition-smooth: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-canvas);
+            color: var(--text-primary);
+            padding: 3rem;
+            letter-spacing: -0.01em;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Luxury Header Framework */
+        header {
+            border-top: 4px solid var(--luxury-gold);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 3.5rem;
+            border-bottom: 1px solid var(--border-elegant);
+            padding-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 300;
+            letter-spacing: -0.04em;
+            color: var(--luxury-dark);
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-top: 0.4rem;
+        }
+
+        /* Premium Minimalist Upload Trigger */
+        .upload-boutique {
+            position: relative;
+            background: var(--luxury-dark);
+            color: #ffffff;
+            padding: 0.9rem 2rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            border: 1px solid var(--luxury-dark);
+            transition: var(--transition-smooth);
+        }
+
+        .upload-boutique:hover {
+            background: transparent;
+            color: var(--luxury-dark);
+            border-color: var(--luxury-dark);
+        }
+
+        #csv-files { display: none; }
+
+        /* Navigation Ribbon */
+        .tabs-luxury {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border-elegant);
+            padding-bottom: 0.1rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.6rem 0;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            transition: var(--transition-smooth);
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            color: var(--luxury-gold);
+            font-weight: 500;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--luxury-gold);
+        }
+
+        /* Top Feature Hero Element */
+        .hero-chart-card {
+            background: var(--surface-card);
+            border: 1px solid var(--border-elegant);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.01);
+        }
+
+        /* KPI Micro-Metrics Cards */
+        .kpi-luxury-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .kpi-card {
+            background: var(--surface-card);
+            border: 1px solid var(--border-elegant);
+            padding: 2rem;
+            border-left: 2px solid var(--luxury-gold);
+        }
+
+        .kpi-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-top: 0.6rem;
+            letter-spacing: -0.03em;
+            color: var(--luxury-dark);
+        }
+
+        /* Adaptive Dashboard Layout Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .card-luxury {
+            background: var(--surface-card);
+            border: 1px solid var(--border-elegant);
+            padding: 2rem;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.01);
+        }
+
+        .card-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-elegant);
+            padding-bottom: 0.75rem;
+        }
+
+        .chart-box-wrapper {
+            position: relative;
+            flex-grow: 1;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* High Spenders Editorial Table Styling */
+        .table-luxury {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .table-luxury th, .table-luxury td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid var(--border-elegant);
+            text-align: left;
+        }
+
+        .table-luxury th {
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.75rem;
+        }
+
+        .table-luxury tr:hover td {
+            background-color: #faf9f6;
+            color: var(--luxury-gold);
+        }
+
+        /* Toggle Panel Elements for Assignment Extension Charts */
+        .luxury-toggle-container {
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .btn-reveal-premium {
+            background: transparent;
+            color: var(--luxury-gold);
+            border: 1px solid var(--luxury-gold);
+            padding: 1rem 3rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-reveal-premium:hover {
+            background: var(--luxury-gold);
+            color: #ffffff;
+            box-shadow: 0 10px 30px rgba(184,144,71,0.15);
+        }
+
+        .extended-insights-panel {
+            display: none;
+            border-top: 1px double var(--luxury-gold);
+            padding-top: 4rem;
+            margin-top: 2rem;
+        }
+
+        .section-break-title {
+            font-size: 1.2rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--luxury-gold);
+        }
+
+        /* Initial Blank State Interface Notice */
+        .empty-canvas-state {
+            text-align: center;
+            padding: 8rem 2rem;
+            color: var(--text-muted);
+            border: 1px dashed #d1cbdc;
+            background: var(--surface-card);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Executive Suite Header Area -->
+    <header>
+        <div>
+            <h1>Aura Intelligence Suite</h1>
+            <p class="subtitle">Cross-Client Ledger Schema Mapping & Operational Trends</p>
+        </div>
+        <div class="upload-boutique" onclick="document.getElementById('csv-files').click()">
+            <span id="upload-status-label">Ingest Ledger Repositories</span>
+            <input type="file" id="csv-files" accept=".csv" multiple>
+        </div>
+    </header>
+
+    <div class="tabs-luxury" id="tabs-bar"></div>
+
+    <!-- Active Analytics Workspace Dashboard -->
+    <main id="dashboard-suite" style="display: none;">
+        
+        <!-- Primary Trend Plot Feature (Seasonal Summary vs Daily Trajectory) -->
+        <div class="hero-chart-card">
+            <div class="card-title" id="hero-chart-heading">Aggregate Seasonal Sales Volatility Trajectory</div>
+            <div style="position: relative; height: 320px; width: 100%;"><canvas id="chart-hero-canvas"></canvas></div>
+        </div>
+
+        <!-- Balanced Fine Metric Display Strip -->
+        <div class="kpi-luxury-row">
+            <div class="kpi-card">
+                <div class="kpi-label">Gross Revenue Contribution</div>
+                <div class="kpi-value" id="kpi-rev-val">€0.00</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Captured Settlement Volume</div>
+                <div class="kpi-value" id="kpi-tx-val">0</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Distinct Account Profiles</div>
+                <div class="kpi-value" id="kpi-cust-val">0</div>
+            </div>
+        </div>
+
+        <!-- Matrix Metric Block Mapping Layout Grid -->
+        <div class="dashboard-grid">
+            <div class="card-luxury">
+                <div class="card-title">Peak Distribution Activity Operational Hours</div>
+                <div class="chart-box-wrapper"><canvas id="chart-hours-canvas"></canvas></div>
+            </div>
+
+            <!-- Settlement Profile Card -->
+            <div class="card-luxury">
+                <div class="card-title">Preferred Client Settlement Profiles</div>
+                <div class="chart-box-wrapper"><canvas id="chart-payments-canvas"></canvas></div>
+            </div>
+
+            <div class="card-luxury">
+                <div class="card-title">Operational Domain Category Concentration</div>
+                <div class="chart-box-wrapper"><canvas id="chart-categories-canvas"></canvas></div>
+            </div>
+
+            <div class="card-luxury">
+                <div class="card-title">Elite High-Value Spenders Hierarchy</div>
+                <table class="table-luxury" id="table-vip-leaderboard">
+                    <thead>
+                        <tr>
+                            <th>Rank Portfolio</th>
+                            <th>Identity Verification Tag</th>
+                            <th>Accumulated Output Sum</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Elegant Control Center Trigger for Hidden Assignment Charts -->
+        <div class="luxury-toggle-container">
+            <button class="btn-reveal-premium" id="toggle-premium-btn" onclick="toggleExtendedAnalyticsPanel()">Reveal Extended Assignment Analytics</button>
+        </div>
+
+        <!-- Hidden Extended Metrics Dashboard Wrapper Panel -->
+        <div class="extended-insights-panel" id="premium-extension-panel">
+            <div class="section-break-title">Supplementary Assignment Deep Dives</div>
+            <div class="dashboard-grid">
+                
+                <!-- Additional Metric 1: Product Volume Units Leaderboard -->
+                <div class="card-luxury">
+                    <div class="card-title">Top 10 High-Demand Product Logistics Volume (Quantity)</div>
+                    <div class="chart-box-wrapper"><canvas id="chart-premium-volume"></canvas></div>
+                </div>
+
+                <!-- Modified Metric 2: Category Average Order Basket Valuation -->
+                <div class="card-luxury">
+                    <div class="card-title">Average Ticket Size Contribution (Category AOV Breakdown)</div>
+                    <div class="chart-box-wrapper"><canvas id="chart-premium-aov"></canvas></div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Fallback Content Framework Notice -->
+    <div id="blank-state-notice" class="empty-canvas-state">
+        System idling. Provide clean transaction matrix archives to process analytical models.
+    </div>
+
+    <script>
+        const TRANSACTION_METHOD_DICTIONARY = { 'CD': 'Cash Down', 'CC': 'Credit Card', 'CQ': 'Cheque', 'PP': 'PayPal', 'BT': 'Bank Transfer' };
+        const RECONCILIATION_TIMELINE = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        
+        let clientDataVault = {};
+        let systemActiveCharts = {};
+        let detailsPanelExpanded = false;
+
+        function toggleExtendedAnalyticsPanel() {
+            const container = document.getElementById('premium-extension-panel');
+            const toggleBtn = document.getElementById('toggle-premium-btn');
+            
+            detailsPanelExpanded = !detailsPanelExpanded;
+            if (detailsPanelExpanded) {
+                container.style.display = 'block';
+                toggleBtn.innerText = "Conceal Extended Assignment Analytics";
+                const primaryActiveTab = document.querySelector('.tab-btn.active').getAttribute('data-target');
+                drawExtendedAssignmentCharts(primaryActiveTab);
+            } else {
+                container.style.display = 'none';
+                toggleBtn.innerText = "Reveal Extended Assignment Analytics";
+            }
+        }
+
+        document.getElementById('csv-files').addEventListener('change', function(e) {
+            const files = e.target.files;
+            if (!files.length) return;
+
+            document.getElementById('upload-status-label').innerText = `Aggregated ${files.length} Matrix Sources`;
+            clientDataVault = { "All Months": initiateMetricsTemplate() };
+            let queueLength = 0;
+
+            Array.from(files).forEach(file => {
+                Papa.parse(file, {
+                    header: true,
+                    dynamicTyping: true,
+                    skipEmptyLines: true,
+                    complete: function(resultPack) {
+                        mapAndCompileClientData(resultPack.data);
+                        queueLength++;
+                        if (queueLength === files.length) {
+                            document.getElementById('blank-state-notice').style.display = 'none';
+                            document.getElementById('dashboard-suite').style.display = 'block';
+                            renderLuxuryNavigationTabs();
+                            displayTargetWorkspaceTab("All Months");
+                        }
+                    }
+                });
+            });
+        });
+
+        function initiateMetricsTemplate() {
+            return { 
+                totalVolume: 0, 
+                transactionsCount: 0, 
+                hourlyScatter: Array(24).fill(0), 
+                paymentDistribution: {}, 
+                categoryBreakdown: {}, 
+                categoryTransactionCount: {}, // Track frequency counts per category
+                consumerPortfolios: {}, 
+                chronologicalDayBreakdown: {}, 
+                articleVolumeMap: {} 
+            };
+        }
+
+        function mapAndCompileClientData(records) {
+            records.forEach(entry => {
+                let amount = parseFloat(entry.Total_Amount || entry.Revenue || entry.amount || entry.Total_Sale || entry.total || 0);
+                if (isNaN(amount)) amount = 0;
+
+                let volumeQuantity = parseInt(entry.Quantity || entry.quantity || entry.Qty || 1);
+                if (isNaN(volumeQuantity)) volumeQuantity = 1;
+
+                let rawTimelineStamp = entry.Purchase_Date || entry.Timestamp || entry.date || entry.Order_Date || "";
+                let itemDescription = String(entry.Stock_Name || entry.Product || entry.Item_Description || "Unspecified Commodity").trim();
+                
+                let activeHour = 12;
+                let identifiedMonth = "Unknown";
+                let derivedDay = 1;
+
+                if (rawTimelineStamp) {
+                    let calibratedDate = new Date(rawTimelineStamp);
+                    if (!isNaN(calibratedDate.getTime())) {
+                        activeHour = calibratedDate.getHours();
+                        identifiedMonth = RECONCILIATION_TIMELINE[calibratedDate.getMonth()];
+                        derivedDay = calibratedDate.getDate();
+                    } else {
+                        let dynamicMatches = String(rawTimelineStamp).match(/(\d{1,2}):(\d{2})/);
+                        if (dynamicMatches) activeHour = parseInt(dynamicMatches[1]);
+                        identifiedMonth = entry.Month || "Unknown";
+                    }
+                }
+
+                let standardPaymentString = String(entry.Payment_Method || entry.payment || "Unknown").trim();
+                if (TRANSACTION_METHOD_DICTIONARY[standardPaymentString]) standardPaymentString = TRANSACTION_METHOD_DICTIONARY[standardPaymentString];
+
+                let businessCategory = String(entry.Category_Name || entry.Category || "General Merchant").trim();
+
+                let consumerFirst = String(entry.First_Name || entry.Customer_Name || entry.Client || "").trim();
+                let consumerLast = String(entry.Last_Name || "").trim();
+                let clientCompositeKey = `${consumerFirst} ${consumerLast}`.trim();
+
+                if (!clientDataVault[identifiedMonth] && identifiedMonth !== "Unknown") {
+                    clientDataVault[identifiedMonth] = initiateMetricsTemplate();
+                }
+
+                const allocationStreams = ["All Months"];
+                if (identifiedMonth !== "Unknown") allocationStreams.push(identifiedMonth);
+
+                allocationStreams.forEach(stream => {
+                    let vaultPointer = clientDataVault[stream];
+                    vaultPointer.totalVolume += amount;
+                    vaultPointer.transactionsCount++;
+                    vaultPointer.hourlyScatter[activeHour]++;
+                    vaultPointer.paymentDistribution[standardPaymentString] = (vaultPointer.paymentDistribution[standardPaymentString] || 0) + 1;
+                    
+                    vaultPointer.categoryBreakdown[businessCategory] = (vaultPointer.categoryBreakdown[businessCategory] || 0) + amount;
+                    vaultPointer.categoryTransactionCount[businessCategory] = (vaultPointer.categoryTransactionCount[businessCategory] || 0) + 1;
+                    
+                    vaultPointer.articleVolumeMap[itemDescription] = (vaultPointer.articleVolumeMap[itemDescription] || 0) + volumeQuantity;
+                    
+                    if (stream !== "All Months") {
+                        vaultPointer.chronologicalDayBreakdown[derivedDay] = (vaultPointer.chronologicalDayBreakdown[derivedDay] || 0) + amount;
+                    }
+
+                    if (clientCompositeKey && consumerFirst.toLowerCase() !== 'random' && consumerFirst.toLowerCase() !== 'null' && consumerFirst.toLowerCase() !== '') {
+                        vaultPointer.consumerPortfolios[clientCompositeKey] = (vaultPointer.consumerPortfolios[clientCompositeKey] || 0) + amount;
+                    }
+                });
+            });
+        }
+
+        function renderLuxuryNavigationTabs() {
+            const ribbonContainer = document.getElementById('tabs-bar');
+            ribbonContainer.innerHTML = '';
+            
+            const standardizedOrdering = Object.keys(clientDataVault).sort((x, y) => {
+                if (x === "All Months") return -1;
+                if (y === "All Months") return 1;
+                return RECONCILIATION_TIMELINE.indexOf(x) - RECONCILIATION_TIMELINE.indexOf(y);
+            });
+
+            standardizedOrdering.forEach(tabLabel => {
+                const actionButton = document.createElement('button');
+                actionButton.className = 'tab-btn';
+                actionButton.innerText = tabLabel;
+                actionButton.setAttribute('data-target', tabLabel);
+                actionButton.onclick = function() {
+                    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                    actionButton.classList.add('active');
+                    displayTargetWorkspaceTab(tabLabel);
+                };
+                ribbonContainer.appendChild(actionButton);
+            });
+            ribbonContainer.firstChild.classList.add('active');
+        }
+
+        function displayTargetWorkspaceTab(tabIdKey) {
+            const dataLayerContext = clientDataVault[tabIdKey];
+            if (!dataLayerContext) return;
+
+            document.getElementById('kpi-rev-val').innerText = '€' + dataLayerContext.totalVolume.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('kpi-tx-val').innerText = dataLayerContext.transactionsCount.toLocaleString();
+            document.getElementById('kpi-cust-val').innerText = Object.keys(dataLayerContext.consumerPortfolios).length.toLocaleString();
+
+            plotLineMetrics('chart-hours-canvas', Array.from({length: 24}, (_, idx) => `${idx}:00`), dataLayerContext.hourlyScatter, 'Transactions Incurred');
+            plotBarMetrics('chart-categories-canvas', Object.keys(dataLayerContext.categoryBreakdown), Object.values(dataLayerContext.categoryBreakdown), '#1c1a17', 14);
+            plotPieMetrics('chart-payments-canvas', Object.keys(dataLayerContext.paymentDistribution), Object.values(dataLayerContext.paymentDistribution));
+
+            if (tabIdKey === "All Months") {
+                document.getElementById('hero-chart-heading').innerText = "Aggregate Seasonal Gross Revenue Performance Portfolio";
+                let seasonalMonthsLabels = Object.keys(clientDataVault).filter(key => key !== "All Months").sort((a, b) => RECONCILIATION_TIMELINE.indexOf(a) - RECONCILIATION_TIMELINE.indexOf(b));
+                let seasonalRevenueValues = seasonalMonthsLabels.map(mLabel => clientDataVault[mLabel].totalVolume);
+                plotBarMetrics('chart-hero-canvas', seasonalMonthsLabels, seasonalRevenueValues, '#b89047', 40);
+            } else {
+                document.getElementById('hero-chart-heading').innerText = `Daily Chronological Revenue Performance Flow — ${tabIdKey}`;
+                let distinctNumericDays = Object.keys(dataLayerContext.chronologicalDayBreakdown).sort((a, b) => parseInt(a) - parseInt(b));
+                let dynamicDayLabels = distinctNumericDays.map(dayNum => `Day ${dayNum}`);
+                let dynamicDayValues = distinctNumericDays.map(dayNum => dataLayerContext.chronologicalDayBreakdown[dayNum]);
+                plotLineMetrics('chart-hero-canvas', dynamicDayLabels, dynamicDayValues, 'Gross Sum Value (€)');
+            }
+
+            const tableTargetBody = document.getElementById('table-vip-leaderboard').querySelector('tbody');
+            tableTargetBody.innerHTML = '';
+            const topSpendersHierarchy = Object.entries(dataLayerContext.consumerPortfolios).sort((a, b) => b[1] - a[1]).slice(0, 10);
+
+            if (!topSpendersHierarchy.length) {
+                tableTargetBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); font-size: 0.75rem; padding: 2rem 0;">No identified private customer log traces mapped.</td></tr>`;
+            } else {
+                topSpendersHierarchy.forEach(([accountName, aggregateSpent], placementIndex) => {
+                    tableTargetBody.insertAdjacentHTML('beforeend', `
+                        <tr>
+                            <td><b style="color: var(--luxury-gold)">#${placementIndex + 1}</b></td>
+                            <td style="font-weight: 500;">${accountName}</td>
+                            <td>€${aggregateSpent.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        </tr>
+                    `);
+                });
+            }
+
+            if (detailsPanelExpanded) {
+                drawExtendedAssignmentCharts(tabIdKey);
+            }
+        }
+
+        function drawExtendedAssignmentCharts(activeTabKey) {
+            const dataLayerContext = clientDataVault[activeTabKey];
+            if (!dataLayerContext) return;
+
+            // Extra Metric Insight 1: Product Volume Log Rankings
+            const topProductsByUnits = Object.entries(dataLayerContext.articleVolumeMap).sort((a, b) => b[1] - a[1]).slice(0, 10);
+            const productLabels = topProductsByUnits.map(p => p[0].length > 22 ? p[0].substring(0, 20) + '...' : p[0]);
+            const productQuantities = topProductsByUnits.map(p => p[1]);
+            plotBarMetrics('chart-premium-volume', productLabels, productQuantities, '#b89047', 12);
+
+            // Shift focus from payment profiles to Category AOV Analysis Breakdown
+            let productCategories = Object.keys(dataLayerContext.categoryBreakdown);
+            let categoryAOVValues = productCategories.map(category => {
+                let totalCategoryRevenue = dataLayerContext.categoryBreakdown[category] || 0;
+                let totalCategoryVolumeCount = dataLayerContext.categoryTransactionCount[category] || 1;
+                return totalCategoryRevenue / totalCategoryVolumeCount;
+            });
+            
+            plotLineMetrics('chart-premium-aov', productCategories, categoryAOVValues, 'Category Ticket Mean (€)');
+        }
+
+        /* Specialized Pie Visualizer Rendering Engine */
+        function plotPieMetrics(elementCanvasId, standardLabels, numericPoints) {
+            if (systemActiveCharts[elementCanvasId]) systemActiveCharts[elementCanvasId].destroy();
+            const graphicContext = document.getElementById(elementCanvasId).getContext('2d');
+            const luxuryPalette = ['#b89047', '#1c1a17', '#706c64', '#eae6df', '#4a463f'];
+            
+            systemActiveCharts[elementCanvasId] = new Chart(graphicContext, {
+                type: 'pie',
+                data: {
+                    labels: standardLabels,
+                    datasets: [{
+                        data: numericPoints,
+                        backgroundColor: luxuryPalette.slice(0, standardLabels.length),
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                color: '#706c64',
+                                font: { size: 10, weight: '500' },
+                                boxWidth: 10,
+                                padding: 15
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function plotLineMetrics(elementCanvasId, standardLabels, numericPoints, descriptiveLegend) {
+            if (systemActiveCharts[elementCanvasId]) systemActiveCharts[elementCanvasId].destroy();
+            const graphicContext = document.getElementById(elementCanvasId).getContext('2d');
+            systemActiveCharts[elementCanvasId] = new Chart(graphicContext, {
+                type: 'line',
+                data: {
+                    labels: standardLabels,
+                    datasets: [{ label: descriptiveLegend, data: numericPoints, borderColor: '#b89047', borderWidth: 1, pointBackgroundColor: '#1c1a17', pointRadius: 1.5, backgroundColor: 'rgba(184,144,71,0.02)', fill: true, tension: 0.1 }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { color: '#706c64', font: { size: 10 } }, grid: { color: '#f5f3ef' } }, x: { ticks: { color: '#706c64', font: { size: 9 } }, grid: { display: false } } }
+                }
+            });
+        }
+
+        function plotBarMetrics(elementCanvasId, standardLabels, numericPoints, structuralHexColor, customizedThickness) {
+            if (systemActiveCharts[elementCanvasId]) systemActiveCharts[elementCanvasId].destroy();
+            const graphicContext = document.getElementById(elementCanvasId).getContext('2d');
+            systemActiveCharts[elementCanvasId] = new Chart(graphicContext, {
+                type: 'bar',
+                data: {
+                    labels: standardLabels,
+                    datasets: [{ data: numericPoints, backgroundColor: structuralHexColor, barThickness: customizedThickness }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { color: '#706c64', font: { size: 10 } }, grid: { color: '#f5f3ef' } }, x: { ticks: { color: '#706c64', font: { size: 9 } }, grid: { display: false } } }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
