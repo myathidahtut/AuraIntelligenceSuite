@@ -27,6 +27,9 @@ Aura Intelligence Suite is an executive-level single-page web application (SPA) 
 * **Operational Domain Concentration:** Tracks gross fiscal distributions across multi-tier retail business vertical classifications.
 * **Elite Spenders Hierarchy (VIP Leaderboard):** A programmatic leaderboard that ranks customers by aggregate spending volume, with algorithmic filtering to exclude internal data anomalies or anonymous logs (e.g., `Random`, `Null`).
 
+<img width="1200" height="412" alt="image" src="https://github.com/user-attachments/assets/ca9b91a8-97aa-483b-ae37-59d210871575" />
+<img width="1267" height="631" alt="image" src="https://github.com/user-attachments/assets/b5678475-7da8-4799-949f-5716f94f80ec" />
+
 ### 4. Supplementary Deep Dives (Extended Panel)
 * **High-Demand Product Logistics:** A volume-centric bar distribution analyzing the top 10 physical inventory articles by quantity units moved.
 * **Average Ticket Size Contribution (Category AOV Breakdown):** Calculates the true mathematical average order value ($\text{AOV} = \frac{\text{Gross Revenue}}{\text{Transaction Volume}}$) isolated by operational vertical to pinpoint high-yield consumer baskets.
