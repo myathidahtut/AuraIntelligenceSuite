@@ -34,6 +34,8 @@ Aura Intelligence Suite is an executive-level single-page web application (SPA) 
 * **High-Demand Product Logistics:** A volume-centric bar distribution analyzing the top 10 physical inventory articles by quantity units moved.
 * **Average Ticket Size Contribution (Category AOV Breakdown):** Calculates the true mathematical average order value ($\text{AOV} = \frac{\text{Gross Revenue}}{\text{Transaction Volume}}$) isolated by operational vertical to pinpoint high-yield consumer baskets.
 
+<img width="1268" height="497" alt="image" src="https://github.com/user-attachments/assets/1decf27a-ccd1-4075-a9a5-e0206d19de7f" />
+
 ---
 
 ## 🎨 Design Philosophy & UX Architecture
