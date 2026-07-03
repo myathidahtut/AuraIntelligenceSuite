@@ -33,6 +33,10 @@ The parser looks for these fields (or common aliases of them) in your CSV:
 
 Vanilla HTML/CSS/JS, [PapaParse](https://www.papaparse.com/) for CSV parsing, and [Chart.js](https://www.chartjs.org/) for charts — all loaded via CDN, so there's no build step.
 
+## Live demo
+
+[myathidahtut.github.io/AuraIntelligenceSuite](https://myathidahtut.github.io/AuraIntelligenceSuite/)
+
 ## Run it locally
 
 No install required — it's a static page.
